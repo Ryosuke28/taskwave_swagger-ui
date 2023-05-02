@@ -1,0 +1,320 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Taskwave User
+servers:
+  - url: http://localhost:3011/api/v1
+    description: Development server
+  - url: http://localhost:3011/api/v1
+    description: Production server
+paths:
+  /users:
+    post:
+      summary: ユーザー作成
+      description: |
+        ユーザーを作成する
+      operationId: createUsers
+      tags:
+        - ユーザー情報
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - properties:
+                    user:
+                      type: object
+                      properties:
+                        name:
+                          $ref: '#/components/schemas/UserName'
+                        alias:
+                          $ref: '#/components/schemas/UserAlias'
+                        email:
+                          $ref: '#/components/schemas/UserEmail'
+                        password:
+                          $ref: '#/components/schemas/UserPassword'
+                        password_confirmation:
+                          $ref: '#/components/schemas/UserPasswordConfirmation'
+                      required:
+                        - name
+                        - email
+                        - password
+                        - password_confirmation
+      responses:
+        '200':
+          description: |
+            リクエスト成功
+            
+            - ユーザー情報をレスポンスする
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        $ref: '#/components/schemas/UserId'
+                      name:
+                        $ref: '#/components/schemas/UserName'
+                      alias:
+                        $ref: '#/components/schemas/UserAlias'
+                      email:
+                        $ref: '#/components/schemas/UserEmail'
+                      created_at:
+                        $ref: '#/components/schemas/CreatedAt'
+                      updated_at:
+                        $ref: '#/components/schemas/UpdatedAt'
+        '400':
+          description: |
+            パラメータ不正によるエラー
+            
+            - アカウント名を入力してください
+            - メールアドレスはすでに存在します
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+  /users/{user_id}/edit:
+    get:
+      summary: ユーザー詳細
+      description: |
+        ユーザー詳細情報を取得する
+      operationId: editUsers
+      tags:
+        - ユーザー情報
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: 取得するユーザーのID
+          schema:
+            type: integer
+        - name: request_user_id
+          in: header
+          required: true
+          description: リクエストするユーザーID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: |
+            リクエスト成功
+            
+            - ユーザー情報をレスポンスする
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        $ref: '#/components/schemas/UserId'
+                      name:
+                        $ref: '#/components/schemas/UserName'
+                      alias:
+                        $ref: '#/components/schemas/UserAlias'
+                      email:
+                        $ref: '#/components/schemas/UserEmail'
+                      created_at:
+                        $ref: '#/components/schemas/CreatedAt'
+                      updated_at:
+                        $ref: '#/components/schemas/UpdatedAt'
+        '400':
+          description: |
+            パラメータ不正によるエラー
+            
+            - ユーザーは存在しません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+  /petssample:
+    get:
+      summary: List all petsffaad1AAA
+      operationId: listPets
+      tags:
+        - pets
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: A paged array of pets
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pets'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a pet
+      operationId: createPets
+      tags:
+        - pets
+      responses:
+        '201':
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /pets/{petId}:
+    get:
+      summary: Info for a specific pet
+      operationId: showPetById
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: The id of the pet to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        tag:
+          type: string
+    UserId:
+      type: integer
+      format: int64
+      description: ユーザーID
+      example: 1
+    UserName:
+      type: string
+      description: アカウント名
+      example: yamada
+    UserAlias:
+      type: string
+      description: 別名
+      example: 山田太郎
+    UserEmail:
+      type: string
+      description: メールアドレス
+      example: test@example.com
+    UserPassword:
+      type: string
+      description: パスワード
+      example: password0
+    UserPasswordConfirmation:
+      type: string
+      description: パスワード（確認）
+      example: password0
+    CreatedAt:
+      type: string
+      format: date-time
+      description: 作成日時
+      example: '2022-04-01T12:00:00+09:00'
+    UpdatedAt:
+      type: string
+      format: date-time
+      description: 更新日時
+      example: '2022-04-01T23:59:59+09:00'
+    Pet:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        tag:
+          type: string
+    Pets:
+      type: array
+      items:
+        $ref: '#/components/schemas/Pet'
+    Error400:
+      type: object
+      required:
+        - error_code
+        - error_message
+      properties:
+        title:
+          type: string
+          example: ユーザー作成処理
+        status:
+          type: integer
+          format: int32
+          example: 400
+        error_code:
+          type: string
+          example: UAM_010001
+        error_message:
+          type: array
+          items:
+            type: string
+            example: 不正なパラメータです
+    Error404:
+      type: object
+      required:
+        - error_code
+        - error_message
+      properties:
+        title:
+          type: string
+          example: ユーザー詳細取得処理
+        status:
+          type: integer
+          format: int32
+          example: 404
+        error_code:
+          type: string
+          example: UAM_000001
+        error_message:
+          type: array
+          items:
+            type: string
+            example: ユーザーは存在しません
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

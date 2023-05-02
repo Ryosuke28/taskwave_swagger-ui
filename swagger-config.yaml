@@ -1,0 +1,5 @@
+urls: [
+  { url: "/swagger-ui/auth-api/team.yaml", name: "auth-api/team"},
+  { url: "/swagger-ui/auth-api/user.yaml", name: "auth-api/user"},
+  { url: "/swagger-ui/task-api/user.yaml", name: "task-api/team"}
+]

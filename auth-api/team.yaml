@@ -1,0 +1,543 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Taskwave Team
+servers:
+  - url: http://localhost:3011/api/v1
+    description: Development server
+  - url: http://localhost:3011/api/v1
+    description: Production server
+paths:
+  /teams:
+    get:
+      summary: チーム一覧
+      description: |
+        チーム一覧を表示する
+      operationId: indexTeams
+      tags:
+        - チーム情報
+      parameters:
+        - name: request_user_id
+          in: header
+          required: true
+          description: リクエストするユーザーID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: |
+            リクエスト成功
+            
+            - チーム一覧情報をレスポンスする
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  allOf:
+                    - properties:
+                        id:
+                          $ref: '#/components/schemas/TeamId'
+                        name:
+                          $ref: '#/components/schemas/TeamName'
+                        description:
+                          $ref: '#/components/schemas/TeamDescription'
+                        personal_flag:
+                          $ref: '#/components/schemas/PersonalFlag'
+        '404':
+          description: |
+            パラメータ不正によるエラー
+            
+            - チームは存在しません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    post:
+      summary: チーム作成
+      description: |
+        チームを作成する
+      operationId: createTeams
+      tags:
+        - チーム情報
+      parameters:
+        - name: request_user_id
+          in: header
+          required: true
+          description: リクエストするユーザーID
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - properties:
+                    team:
+                      type: object
+                      properties:
+                        name:
+                          $ref: '#/components/schemas/TeamName'
+                        description:
+                          $ref: '#/components/schemas/TeamDescription'
+                        personal_flag:
+                          $ref: '#/components/schemas/PersonalFlag'
+                      required:
+                        - name
+      responses:
+        '200':
+          description: |
+            リクエスト成功
+            
+            - チーム情報をレスポンスする
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        $ref: '#/components/schemas/TeamId'
+                      name:
+                        $ref: '#/components/schemas/TeamName'
+                      description:
+                        $ref: '#/components/schemas/TeamDescription'
+                      personal_flag:
+                        $ref: '#/components/schemas/PersonalFlag'
+                      created_at:
+                        $ref: '#/components/schemas/CreatedAt'
+                      updated_at:
+                        $ref: '#/components/schemas/UpdatedAt'
+        '400':
+          description: |
+            パラメータ不正によるエラー
+            
+            - チーム名を入力してください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+  /teams/count:
+    get:
+      summary: チーム数取得
+      description: |
+        チーム数を取得する
+      operationId: countTeams
+      tags:
+        - チーム情報
+      parameters:
+        - name: request_user_id
+          in: header
+          required: true
+          description: リクエストするユーザーID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: |
+            リクエスト成功
+            
+            - チーム一覧情報をレスポンスする
+          content:
+            application/json:
+              schema:
+                type: integer
+                example: 3
+  /teams/{team_id}/edit:
+    get:
+      summary: チーム詳細
+      description: |
+        チーム詳細を表示する
+      operationId: editTeams
+      tags:
+        - チーム情報
+      parameters:
+        - name: team_id
+          in: path
+          required: true
+          description: 取得するチームのID
+          schema:
+            type: string
+        - name: request_user_id
+          in: header
+          required: true
+          description: リクエストするユーザーID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: |
+            リクエスト成功
+            
+            - チーム情報をレスポンスする
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        $ref: '#/components/schemas/TeamId'
+                      name:
+                        $ref: '#/components/schemas/TeamName'
+                      description:
+                        $ref: '#/components/schemas/TeamDescription'
+                      personal_flag:
+                        $ref: '#/components/schemas/PersonalFlag'
+                      created_at:
+                        $ref: '#/components/schemas/CreatedAt'
+                      updated_at:
+                        $ref: '#/components/schemas/UpdatedAt'
+        '404':
+          description: |
+            パラメータ不正によるエラー
+            
+            - チームは存在しません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+  /teams/{team_id}:
+    patch:
+      summary: チーム更新
+      description: |
+        チーム情報を更新する
+      operationId: updateTeams
+      tags:
+        - チーム情報
+      parameters:
+        - name: team_id
+          in: path
+          required: true
+          description: 取得するチームのID
+          schema:
+            type: string
+        - name: request_user_id
+          in: header
+          required: true
+          description: リクエストするユーザーID
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - properties:
+                    team:
+                      type: object
+                      properties:
+                        name:
+                          $ref: '#/components/schemas/TeamName'
+                        description:
+                          $ref: '#/components/schemas/TeamDescription'
+                        personal_flag:
+                          $ref: '#/components/schemas/PersonalFlag'
+      responses:
+        '200':
+          description: |
+            リクエスト成功
+            
+            - チーム情報をレスポンスする
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        $ref: '#/components/schemas/TeamId'
+                      name:
+                        $ref: '#/components/schemas/TeamName'
+                      description:
+                        $ref: '#/components/schemas/TeamDescription'
+                      personal_flag:
+                        $ref: '#/components/schemas/PersonalFlag'
+                      created_at:
+                        $ref: '#/components/schemas/CreatedAt'
+                      updated_at:
+                        $ref: '#/components/schemas/UpdatedAt'
+        '404':
+          description: |
+            パラメータ不正によるエラー
+            
+            - チームは存在しません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+  /teams/{team_id}/add_user:
+    post:
+      summary: メンバー登録
+      description: |
+        チームにメンバーを登録する
+      operationId: addUsers
+      tags:
+        - メンバー情報
+      parameters:
+        - name: team_id
+          in: path
+          required: true
+          description: 登録するチームのID
+          schema:
+            type: string
+        - name: request_user_id
+          in: header
+          required: true
+          description: リクエストするユーザーID
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - properties:
+                    user:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          email:
+                            $ref: '#/components/schemas/UserEmail'
+                          authority_id:
+                            $ref: '#/components/schemas/Authority_id'
+                        required:
+                          - email
+                          - authority_id
+      responses:
+        '200':
+          description: |
+            リクエスト成功
+            
+            - 空のオブジェクトをレスポンスする
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: |
+            パラメータ不正によるエラー
+            
+            - アドレス：user1@example.comの招待に失敗しました
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
+          description: |
+            パラメータ不正によるエラー
+            
+            - チームは存在しません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+  /teams/{team_id}/update_authority:
+    patch:
+      summary: メンバー権限更新
+      description: |
+        メンバーの権限を更新する
+      operationId: updateAuthority
+      tags:
+        - メンバー情報
+      parameters:
+        - name: team_id
+          in: path
+          required: true
+          description: 登録するチームのID
+          schema:
+            type: string
+        - name: request_user_id
+          in: header
+          required: true
+          description: リクエストするユーザーID
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - properties:
+                    user:
+                      type: object
+                      properties:
+                        user_id:
+                          $ref: '#/components/schemas/User_id'
+                        authority_id:
+                          $ref: '#/components/schemas/Authority_id'
+                      required:
+                        - user_id
+                        - authority_id
+      responses:
+        '200':
+          description: |
+            リクエスト成功
+            
+            - 空のオブジェクトをレスポンスする
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: |
+            パラメータ不正によるエラー
+            
+            - メンバーの権限更新に失敗しました
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
+          description: |
+            パラメータ不正によるエラー
+            
+            - チームは存在しません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+  /teams/{team_id}/delete_user:
+    post:
+      summary: メンバー除外
+      description: |
+        メンバーを除外する
+      operationId: deleteUser
+      tags:
+        - メンバー情報
+      parameters:
+        - name: team_id
+          in: path
+          required: true
+          description: 登録するチームのID
+          schema:
+            type: string
+        - name: request_user_id
+          in: header
+          required: true
+          description: リクエストするユーザーID
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - properties:
+                    user:
+                      type: object
+                      properties:
+                        user_id:
+                          $ref: '#/components/schemas/User_id'
+                      required:
+                        - user_id
+      responses:
+        '200':
+          description: |
+            リクエスト成功
+            
+            - 空のオブジェクトをレスポンスする
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: |
+            パラメータ不正によるエラー
+            
+            - メンバーの除外に失敗しました
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
+          description: |
+            パラメータ不正によるエラー
+            
+            - チームは存在しません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+components:
+  schemas:
+    TeamId:
+      type: integer
+      format: int64
+      description: チームID
+      example: 1
+    TeamName:
+      type: string
+      description: チーム名
+      example: team1
+    TeamDescription:
+      type: string
+      description: 説明
+      example: サンプルのチーム
+    PersonalFlag:
+      type: boolean
+      description: 個人フラグ
+      example: true
+    CreatedAt:
+      type: string
+      format: date-time
+      description: 作成日時
+      example: '2022-04-01T12:00:00+09:00'
+    UpdatedAt:
+      type: string
+      format: date-time
+      description: 更新日時
+      example: '2022-04-01T23:59:59+09:00'
+    User_id:
+      type: integer
+      description: ユーザーID
+      example: 1
+    UserEmail:
+      type: string
+      description: ユーザーのメールアドレス
+      example: user1@example.com
+    Authority_id:
+      type: integer
+      description: 権限ID
+      example: 1
+    Error400:
+      type: object
+      required:
+        - error_code
+        - error_message
+      properties:
+        title:
+          type: string
+          example: チーム作成処理
+        status:
+          type: integer
+          format: int32
+          example: 400
+        error_code:
+          type: string
+          example: UAM_020001
+        error_message:
+          type: array
+          items:
+            type: string
+            example: 不正なパラメータです
+    Error404:
+      type: object
+      required:
+        - error_code
+        - error_message
+      properties:
+        title:
+          type: string
+          example: チーム詳細取得処理
+        status:
+          type: integer
+          format: int32
+          example: 404
+        error_code:
+          type: string
+          example: UAM_000001
+        error_message:
+          type: array
+          items:
+            type: string
+            example: チームは存在しません
