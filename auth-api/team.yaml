@@ -458,6 +458,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error404'
+  /teams/user_authority:
+    get:
+      summary: ユーザー権限取得
+      description: |
+        ユーザーのチーム内権限を取得する
+      operationId: getUserAuthority
+      tags:
+        - チーム情報
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          description: 取得するユーザーのID
+          schema:
+            type: integer
+        - name: team_id
+          in: query
+          required: true
+          description: 取得するチームのID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: |
+            リクエスト成功
+            
+            - ユーザーの権限情報をレスポンスする
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      authority:
+                        $ref: '#/components/schemas/Authority'
 components:
   schemas:
     TeamId:
@@ -499,6 +533,10 @@ components:
       type: integer
       description: 権限ID
       example: 1
+    Authority:
+      type: string
+      description: 権限
+      example: 'admin'
     Error400:
       type: object
       required:
