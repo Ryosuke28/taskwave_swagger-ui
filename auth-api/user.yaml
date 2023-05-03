@@ -117,7 +117,83 @@ paths:
                         $ref: '#/components/schemas/CreatedAt'
                       updated_at:
                         $ref: '#/components/schemas/UpdatedAt'
+        '404':
+          description: |
+            パラメータ不正によるエラー
+            
+            - ユーザーは存在しません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+  /users/{user_id}:
+    patch:
+      summary: ユーザー更新
+      description: |
+        ユーザー情報を更新する
+      operationId: updateUsers
+      tags:
+        - ユーザー情報
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: 更新するユーザーのID
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - properties:
+                    user:
+                      type: object
+                      properties:
+                        name:
+                          $ref: '#/components/schemas/UserName'
+                        alias:
+                          $ref: '#/components/schemas/UserAlias'
+                        email:
+                          $ref: '#/components/schemas/UserEmail'
+                        password:
+                          $ref: '#/components/schemas/UserPassword'
+                        password_confirmation:
+                          $ref: '#/components/schemas/UserPasswordConfirmation'
+      responses:
+        '200':
+          description: |
+            リクエスト成功
+            
+            - ユーザー情報をレスポンスする
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        $ref: '#/components/schemas/UserId'
+                      name:
+                        $ref: '#/components/schemas/UserName'
+                      alias:
+                        $ref: '#/components/schemas/UserAlias'
+                      email:
+                        $ref: '#/components/schemas/UserEmail'
+                      created_at:
+                        $ref: '#/components/schemas/CreatedAt'
+                      updated_at:
+                        $ref: '#/components/schemas/UpdatedAt'
         '400':
+          description: |
+            設定内容不正によるエラー
+            
+            - アカウント名を入力してください
+            - パスワード（確認）とパスワードの入力が一致しません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
           description: |
             パラメータ不正によるエラー
             
