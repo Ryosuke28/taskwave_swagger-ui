@@ -43,8 +43,8 @@ paths:
                           $ref: '#/components/schemas/TeamName'
                         description:
                           $ref: '#/components/schemas/TeamDescription'
-                        personal_flag:
-                          $ref: '#/components/schemas/PersonalFlag'
+                        personal:
+                          $ref: '#/components/schemas/Personal'
         '404':
           description: |
             パラメータ不正によるエラー
@@ -81,8 +81,8 @@ paths:
                           $ref: '#/components/schemas/TeamName'
                         description:
                           $ref: '#/components/schemas/TeamDescription'
-                        personal_flag:
-                          $ref: '#/components/schemas/PersonalFlag'
+                        personal:
+                          $ref: '#/components/schemas/Personal'
                       required:
                         - name
       responses:
@@ -102,8 +102,8 @@ paths:
                         $ref: '#/components/schemas/TeamName'
                       description:
                         $ref: '#/components/schemas/TeamDescription'
-                      personal_flag:
-                        $ref: '#/components/schemas/PersonalFlag'
+                      personal:
+                        $ref: '#/components/schemas/Personal'
                       created_at:
                         $ref: '#/components/schemas/CreatedAt'
                       updated_at:
@@ -181,8 +181,8 @@ paths:
                         $ref: '#/components/schemas/TeamName'
                       description:
                         $ref: '#/components/schemas/TeamDescription'
-                      personal_flag:
-                        $ref: '#/components/schemas/PersonalFlag'
+                      personal:
+                        $ref: '#/components/schemas/Personal'
                       created_at:
                         $ref: '#/components/schemas/CreatedAt'
                       updated_at:
@@ -230,8 +230,8 @@ paths:
                           $ref: '#/components/schemas/TeamName'
                         description:
                           $ref: '#/components/schemas/TeamDescription'
-                        personal_flag:
-                          $ref: '#/components/schemas/PersonalFlag'
+                        personal:
+                          $ref: '#/components/schemas/Personal'
       responses:
         '200':
           description: |
@@ -249,8 +249,8 @@ paths:
                         $ref: '#/components/schemas/TeamName'
                       description:
                         $ref: '#/components/schemas/TeamDescription'
-                      personal_flag:
-                        $ref: '#/components/schemas/PersonalFlag'
+                      personal:
+                        $ref: '#/components/schemas/Personal'
                       created_at:
                         $ref: '#/components/schemas/CreatedAt'
                       updated_at:
@@ -473,7 +473,7 @@ components:
       type: string
       description: 説明
       example: サンプルのチーム
-    PersonalFlag:
+    Personal:
       type: boolean
       description: 個人フラグ
       example: true
