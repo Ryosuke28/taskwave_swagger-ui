@@ -1,0 +1,422 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Taskwave Task
+servers:
+  - url: http://localhost:3012/api/v1
+    description: Development server
+  - url: http://localhost:3012/api/v1
+    description: Production server
+paths:
+  /tasks:
+    post:
+      summary: タスク作成
+      description: |
+        タスクを作成する
+      operationId: createTasks
+      tags:
+        - タスク情報
+      parameters:
+        - name: UserId
+          in: header
+          required: true
+          description: リクエストするユーザーのID
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - properties:
+                    task:
+                      type: object
+                      properties:
+                        title:
+                          $ref: '#/components/schemas/TaskTitle'
+                        group_id:
+                          $ref: '#/components/schemas/GroupId'
+                        status_id:
+                          $ref: '#/components/schemas/StatusId'
+                        deadline:
+                          $ref: '#/components/schemas/TaskDeadline'
+                        detail:
+                          $ref: '#/components/schemas/TaskDetail'
+                        user_id:
+                          $ref: '#/components/schemas/UserId'
+                      required:
+                        - title
+      responses:
+        '200':
+          description: |
+            リクエスト成功
+            
+            - タスク情報をレスポンスする
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        $ref: '#/components/schemas/TaskId'
+                      title:
+                        $ref: '#/components/schemas/TaskTitle'
+                      group_id:
+                        $ref: '#/components/schemas/GroupId'
+                      status_id:
+                        $ref: '#/components/schemas/StatusId'
+                      deadline:
+                        $ref: '#/components/schemas/TaskDeadline'
+                      detail:
+                        $ref: '#/components/schemas/TaskDetail'
+                      sort_number:
+                        $ref: '#/components/schemas/TaskSortNumber'
+                      user_id:
+                        $ref: '#/components/schemas/UserId'
+                      created_at:
+                        $ref: '#/components/schemas/CreatedAt'
+                      updated_at:
+                        $ref: '#/components/schemas/UpdatedAt'
+        '400':
+          description: |
+            パラメータ不正によるエラー
+            
+            - タイトルを入力してください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '403':
+          description: |
+            権限不足によるエラー
+            
+            - 権限がありません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+  /tasks/{task_id}:
+    patch:
+      summary: タスク更新
+      description: |
+        タスク情報を更新する
+      operationId: updateTasks
+      tags:
+        - タスク情報
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: 更新するタスクのID
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - properties:
+                    task:
+                      type: object
+                      properties:
+                        title:
+                          $ref: '#/components/schemas/TaskTitle'
+                        group_id:
+                          $ref: '#/components/schemas/GroupId'
+                        status_id:
+                          $ref: '#/components/schemas/StatusId'
+                        deadline:
+                          $ref: '#/components/schemas/TaskDeadline'
+                        detail:
+                          $ref: '#/components/schemas/TaskDetail'
+                        user_id:
+                          $ref: '#/components/schemas/UserId'
+      responses:
+        '200':
+          description: |
+            リクエスト成功
+            
+            - タスク情報をレスポンスする
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        $ref: '#/components/schemas/TaskId'
+                      title:
+                        $ref: '#/components/schemas/TaskTitle'
+                      group_id:
+                        $ref: '#/components/schemas/GroupId'
+                      status_id:
+                        $ref: '#/components/schemas/StatusId'
+                      deadline:
+                        $ref: '#/components/schemas/TaskDeadline'
+                      detail:
+                        $ref: '#/components/schemas/TaskDetail'
+                      sort_number:
+                        $ref: '#/components/schemas/TaskSortNumber'
+                      user_id:
+                        $ref: '#/components/schemas/UserId'
+                      created_at:
+                        $ref: '#/components/schemas/CreatedAt'
+                      updated_at:
+                        $ref: '#/components/schemas/UpdatedAt'
+        '400':
+          description: |
+            設定内容不正によるエラー
+            
+            - タイトルを入力してください
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '403':
+          description: |
+            権限不足によるエラー
+            
+            - 権限がありません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '404':
+          description: |
+            パラメータ不正によるエラー
+            
+            - タスクは存在しません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    delete:
+      summary: タスク削除
+      description: |
+        タスクを削除する
+      operationId: deleteTasks
+      tags:
+        - タスク情報
+      parameters:
+        - name: UserId
+          in: header
+          required: true
+          description: リクエストするユーザーのID
+          schema:
+            type: integer
+        - name: task_id
+          in: path
+          required: true
+          description: 削除するタスクのID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: |
+            リクエスト成功
+            
+            - タスクグループ情報をレスポンスする
+          content:
+            application/json:
+              schema:
+                type: object
+        '403':
+          description: |
+            権限不足によるエラー
+            
+            - 権限がありません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '404':
+          description: |
+            パラメータ不正によるエラー
+            
+            - グループは存在しません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+  /tasks/{task_id}/edit:
+    get:
+      summary: タスク詳細
+      description: |
+        タスク詳細情報を取得する
+      operationId: editTasks
+      tags:
+        - タスク情報
+      parameters:
+        - name: UserId
+          in: header
+          required: true
+          description: リクエストするユーザーのID
+          schema:
+            type: integer
+        - name: task_id
+          in: path
+          required: true
+          description: 取得するタスクのID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: |
+            リクエスト成功
+            
+            - タスク情報をレスポンスする
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - properties:
+                      id:
+                        $ref: '#/components/schemas/TaskId'
+                      title:
+                        $ref: '#/components/schemas/TaskTitle'
+                      group_id:
+                        $ref: '#/components/schemas/GroupId'
+                      status_id:
+                        $ref: '#/components/schemas/StatusId'
+                      deadline:
+                        $ref: '#/components/schemas/TaskDeadline'
+                      detail:
+                        $ref: '#/components/schemas/TaskDetail'
+                      sort_number:
+                        $ref: '#/components/schemas/TaskSortNumber'
+                      user_id:
+                        $ref: '#/components/schemas/UserId'
+                      created_at:
+                        $ref: '#/components/schemas/CreatedAt'
+                      updated_at:
+                        $ref: '#/components/schemas/UpdatedAt'
+        '403':
+          description: |
+            権限不足によるエラー
+            
+            - 権限がありません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '404':
+          description: |
+            パラメータ不正によるエラー
+            
+            - タスクは存在しません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+components:
+  schemas:
+    TaskId:
+      type: integer
+      format: int64
+      description: タスクID
+      example: 1
+    TaskTitle:
+      type: string
+      description: タスクタイトル
+      example: タスク1
+    TaskDetail:
+      type: string
+      description: タスク説明
+      example: 説明文
+    TaskSortNumber:
+      type: integer
+      format: int64
+      description: タスク並び順
+      example: 1
+    GroupId:
+      type: integer
+      format: int64
+      description: タスクグループID
+      example: 1
+    StatusId:
+      type: integer
+      format: int64
+      description: ステータスID
+      example: 1
+    TaskDeadline:
+      type: string
+      format: date
+      description: 作成日時
+      example: '2022-04-01'
+    UserId:
+      type: integer
+      format: int64
+      description: ユーザーID
+      example: 1
+    CreatedAt:
+      type: string
+      format: date-time
+      description: 作成日時
+      example: '2022-04-01T12:00:00+09:00'
+    UpdatedAt:
+      type: string
+      format: date-time
+      description: 更新日時
+      example: '2022-04-01T23:59:59+09:00'
+    Error400:
+      type: object
+      required:
+        - error_code
+        - error_message
+      properties:
+        title:
+          type: string
+          example: タスク作成処理
+        status:
+          type: integer
+          format: int32
+          example: 400
+        error_code:
+          type: string
+          example: TLM_020101
+        error_message:
+          type: array
+          items:
+            type: string
+            example: 不正なパラメータです
+    Error403:
+      type: object
+      required:
+        - error_code
+        - error_message
+      properties:
+        title:
+          type: string
+          example: タスク作成処理
+        status:
+          type: integer
+          format: int32
+          example: 403
+        error_code:
+          type: string
+          example: TLM_000002
+        error_message:
+          type: array
+          items:
+            type: string
+            example: 権限がありません
+    Error404:
+      type: object
+      required:
+        - error_code
+        - error_message
+      properties:
+        title:
+          type: string
+          example: タスク情報更新処理
+        status:
+          type: integer
+          format: int32
+          example: 404
+        error_code:
+          type: string
+          example: TLM_000001
+        error_message:
+          type: array
+          items:
+            type: string
+            example: タスクは存在しません
