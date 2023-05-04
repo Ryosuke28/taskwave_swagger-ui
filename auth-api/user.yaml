@@ -267,7 +267,7 @@ components:
           example: 400
         error_code:
           type: string
-          example: UAM_010001
+          example: UAM_010101
         error_message:
           type: array
           items:
